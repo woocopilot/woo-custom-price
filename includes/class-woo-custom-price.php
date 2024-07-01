@@ -187,6 +187,8 @@ class Woo_Custom_Price {
         return $price;
     }
 
+
+
     /**
      * Custom price HTML.
      *
@@ -194,14 +196,24 @@ class Woo_Custom_Price {
      * @return void
      */
     public function custom_price_html() {
+
+
         global $product;
+        $post_id = get_the_ID();
+
+        $input_label = WoonpHelper::get_input_value($post_id,'_woocp_input_label_text','woocp_input_label_text');
+        $minimum_price = WoonpHelper::get_input_value($post_id,'_woocp_minimum_price','woocp_minimum_price');
+        $maximum_price = WoonpHelper::get_input_value($post_id,'_woocp_maximum_price','woocp_maximum_price');
+        $step = WoonpHelper::get_input_value($post_id,'_woocp_step','woocp_step');
+//        var_dump($minimum_price);wp_die();
+        //=========
+
         $product_price=floatval($product->get_price());
         $value=number_format($product_price, 2, '.', '');
-        $input_label = get_option( 'woocp_input_label_text', 'Enter Your Price' );
-        $minimum_price= absint( get_option('woocp_minimum_price',1) );
-//        var_dump( $minimum_price );
-        $maximum_price= intval( get_option('woocp_maximum_price',1000) );
-        $step= intval( get_option('woocp_step',1) );
+//        $input_label = get_option( 'woocp_input_label_text', 'Enter Your Price' );
+//        $minimum_price= absint( get_option('woocp_minimum_price',1) );
+//        $maximum_price= intval( get_option('woocp_maximum_price',1000) );
+//        $step= intval( get_option('woocp_step',1) );
 
         ob_start();
         ?>
@@ -209,6 +221,7 @@ class Woo_Custom_Price {
         <div class="woocp-price-input">
             <label for="woocp_custom_price"><?php echo esc_html( $input_label ); ?></label>
             <input type="number" id="woocp_custom_price" name="woocp_custom_price" step="<?php echo esc_attr( $step ); ?>" min="<?php echo esc_attr( $minimum_price ); ?>" max="<?php echo esc_attr( $maximum_price ); ?>" value="<?php echo esc_attr(  $value); ?>" />
+
         </div>
 
         <?php
@@ -382,7 +395,7 @@ class Woo_Custom_Price {
     public function get_cart_contents( $cart_contents ) {
         foreach ( $cart_contents as $cart_item ) {
             $price = $cart_item['woocp_custom_price'];
-            if ( ! isset( $price ) ) {
+            if ( ! isset( $cart_item['woocp_custom_price']) ) {
                 continue;
             }
 

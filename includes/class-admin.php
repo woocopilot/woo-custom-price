@@ -186,7 +186,14 @@ class Admin {
      * @retun void
      */
     public function add_data_panel() {
+
         global $woocommerce, $post;
+        $post_id = get_the_ID();
+        $price_label = WoonpHelper::get_input_value($post_id,'_woocp_input_label_text','woocp_input_label_text');
+        $woocp_minimum_price = WoonpHelper::get_input_value($post_id,'_woocp_minimum_price','woocp_minimum_price');
+        $woocp_maximum_price = WoonpHelper::get_input_value($post_id,'_woocp_maximum_price','woocp_maximum_price');
+        $woocp_step = WoonpHelper::get_input_value($post_id,'_woocp_step','woocp_step');
+
         ?>
         <div id='woocp_product_data' class='panel woocommerce_options_panel'>
             <div class='options_group'>
@@ -197,6 +204,7 @@ class Admin {
                     'placeholder' => 'Enter Your Price',
                     'description' => __('Enter the custom price field label.', 'woo-custom-price'),
                     'desc_tip'    => 'true',
+                    'value'       => esc_attr( $price_label ),
                     'type'        => 'text',
                 ));
 
@@ -207,6 +215,7 @@ class Admin {
                     'description' => __('Enter the minimum value (ex: 1). Keep this empty or enter 0 for global settings.', 'woo-custom-price'),
                     'desc_tip'    => 'true',
                     'type'        => 'number',
+                    'value'       => esc_attr( $woocp_minimum_price ),
                     'custom_attributes' => array(
                         'step' => 'any',
                         'min'  => 0,
@@ -220,6 +229,7 @@ class Admin {
                     'description' => __('Enter the maximum value (ex: 1000). Keep this empty or enter 0 for global settings.', 'woo-custom-price'),
                     'desc_tip'    => 'true',
                     'type'        => 'number',
+                    'value'       => esc_attr( $woocp_maximum_price ),
                     'custom_attributes' => array(
                         'step' => 'any',
                         'min'  => 0,
@@ -234,6 +244,7 @@ class Admin {
                     'description' => 'Enter the step value. Keep this empty or enter 0 for global settings.',
                     'desc_tip'    => 'true',
                     'type'        => 'number',
+                    'value'       => esc_attr( $woocp_step ),
                     'custom_attributes' => array(
                         'step' => 'any',
                         'min'  => 0.01,
@@ -277,4 +288,14 @@ class Admin {
             wp_enqueue_style( 'woocp_admin_style', WOOCP_PLUGIN_URL . 'assets/css/admin-style.css', array(), WOOCP_VERSION );
         }
     }
+
+//    public function get_input_value( $post_id, $meta_key, $option_key ) {
+//        $meta_value = get_post_meta($post_id, $meta_key, true);
+//        if (metadata_exists('post', $post_id, $meta_key) && !empty($meta_value)) {
+//            return $meta_value;
+//        } else {
+//            $option_value = get_option($option_key, '');
+//            return !empty($option_value) ? esc_html($option_value) : '';
+//        }
+//    }
 }
